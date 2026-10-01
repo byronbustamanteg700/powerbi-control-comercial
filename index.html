@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Control Comercial — Power BI</title>
+<meta name="description" content="Tablero de Power BI para un distribuidor mayorista: modelo estrella, medidas DAX de margen, descuento y cartera. Datos simulados.">
+<style>
+  :root{
+    --bg:#0B0E14; --card:#141922; --line:#2A3242; --text:#F4F6FA; --muted:#95A0B4;
+    --accent:#4DA3FF; --accent2:#7C5CFF; --alert:#FF7A7A;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:40px 20px 64px}
+  .tag{display:inline-block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+  h1{font-size:clamp(28px,5vw,42px);line-height:1.15;margin:14px 0 10px}
+  h2{font-size:22px;margin:48px 0 14px}
+  p.lead{color:var(--muted);font-size:18px;max-width:760px;margin:0}
+  .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .btn{display:inline-block;text-decoration:none;color:var(--text);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 16px;font-weight:600}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#06101F}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:34px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .kpi b{display:block;font-size:26px;font-variant-numeric:tabular-nums}
+  .kpi span{color:var(--muted);font-size:14px}
+  .kpi.alert b{color:var(--alert)}
+  .frame{position:relative;width:100%;aspect-ratio:16/10;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+  .note{color:var(--muted);font-size:14px;margin-top:8px}
+  ul.findings{padding-left:20px;margin:0}
+  ul.findings li{margin-bottom:10px}
+  ul.findings strong{color:var(--text)}
+  figure{margin:0 0 26px}
+  figure img{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line);background:#fff}
+  figcaption{color:var(--muted);font-size:14px;margin-top:8px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+  table{width:100%;border-collapse:collapse;font-size:15px}
+  td,th{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
+  th{color:var(--muted);font-weight:600}
+  td.n{text-align:right;font-variant-numeric:tabular-nums}
+  pre{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;overflow-x:auto;font-size:14px}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+  footer a{color:var(--accent)}
+  @media (max-width:760px){.grid2{grid-template-columns:1fr}.frame{aspect-ratio:3/4}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <span class="tag">Power BI · DAX · Modelo estrella</span>
+  <h1>Control Comercial: ventas, margen y cartera</h1>
+  <p class="lead">Tablero ejecutivo para un distribuidor mayorista, construido de principio a fin en Power BI. Está diseñado para responder una pregunta: ¿dónde se está yendo el margen?</p>
+  <div class="links">
+    <a class="btn primary" href="https://app.powerbi.com/view?r=eyJrIjoiMDFkYjg2MTMtOGEzZC00NzRkLWJiNzctNzU2YmE4NjNjNDExIiwidCI6IjMzYjVjZjE3LTU3NjktNDQ1Ny1iYTYzLTZjMjY0ODFkMjU5MCIsImMiOjR9" target="_blank" rel="noopener">Abrir el informe en Power BI</a>
+    <a class="btn" href="https://github.com/byronbustamanteg700/powerbi-control-comercial">Ver el repositorio</a>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><b>9,86 M</b><span>Venta neta</span></div>
+    <div class="kpi"><b>21,63 %</b><span>Margen</span></div>
+    <div class="kpi alert"><b>25,83 %</b><span>Margen cedido en descuentos</span></div>
+    <div class="kpi"><b>1,08 M</b><span>Cartera pendiente</span></div>
+    <div class="kpi alert"><b>53,33 %</b><span>Cartera vencida</span></div>
+  </div>
+
+  <h2>Informe en vivo</h2>
+  <div class="frame">
+    <iframe title="Control Comercial - Distribución" loading="lazy" allowfullscreen
+      src="https://app.powerbi.com/view?r=eyJrIjoiMDFkYjg2MTMtOGEzZC00NzRkLWJiNzctNzU2YmE4NjNjNDExIiwidCI6IjMzYjVjZjE3LTU3NjktNDQ1Ny1iYTYzLTZjMjY0ODFkMjU5MCIsImMiOjR9"></iframe>
+  </div>
+  <p class="note">Prueba los filtros de zona, categoría y año. Si el informe no carga, las capturas de abajo muestran las mismas vistas.</p>
+
+  <h2>Lo que reveló</h2>
+  <ul class="findings">
+    <li><strong>Una cuarta parte del margen posible se entrega en descuentos.</strong> El costo no baja cuando el vendedor descuenta, así que cada dólar de descuento sale íntegro del margen: se cede el 25,8 % del margen que se habría obtenido a precio de lista.</li>
+    <li><strong>Vender más no mejora el margen.</strong> Entre enero y julio, la venta de 2026 supera a la de 2025 en 5,1 %, pero el margen se queda en 21,6 % y la parte cedida en descuentos sube de 25,8 % a 26,2 %.</li>
+    <li><strong>Zona Sur + Abarrotes es el caso más grave:</strong> 7,26 % de margen y 62,3 % del margen potencial cedido. Se regaló más margen (≈ 61,9 mil) del que se retuvo (≈ 37,5 mil).</li>
+    <li><strong>Más de la mitad de la cartera está vencida</strong> (53,3 %).</li>
+  </ul>
+
+  <h2>Capturas</h2>
+  <figure>
+    <img src="docs/capturas/01-vista-general.png" alt="Vista general del tablero con tarjetas de indicadores, gráfico de venta y margen por mes, margen por categoría y segmentadores" loading="lazy">
+    <figcaption>Vista general: venta, margen, descuento y cartera en una sola pantalla.</figcaption>
+  </figure>
+  <figure>
+    <img src="docs/capturas/02-zona-sur-abarrotes.png" alt="Tablero filtrado por Zona Sur y categoría Abarrotes: margen de 7,26 % y 62,27 % de margen cedido" loading="lazy">
+    <figcaption>Filtro Zona Sur + Abarrotes: 7,26 % de margen, con el 62,3 % del margen potencial cedido en descuentos.</figcaption>
+  </figure>
+
+  <h2>Modelo de datos</h2>
+  <div class="grid2">
+    <figure>
+      <img src="docs/capturas/03-modelo-estrella.png" alt="Diagrama del modelo estrella en Power BI con dos tablas de hechos y cuatro dimensiones" loading="lazy">
+      <figcaption>Modelo estrella: 6 tablas, 7 relaciones de varios a uno en una sola dirección.</figcaption>
+    </figure>
+    <div>
+      <table>
+        <tr><th>Tabla</th><th>Contenido</th><th style="text-align:right">Filas</th></tr>
+        <tr><td><code>fact_ventas</code></td><td>Líneas de venta</td><td class="n">25.680</td></tr>
+        <tr><td><code>fact_cartera</code></td><td>Facturas por cobrar</td><td class="n">6.528</td></tr>
+        <tr><td><code>dim_fecha</code></td><td>Ene 2025 – jul 2026</td><td class="n">577</td></tr>
+        <tr><td><code>dim_producto</code></td><td>5 categorías</td><td class="n">96</td></tr>
+        <tr><td><code>dim_cliente</code></td><td>Rutas y crédito</td><td class="n">140</td></tr>
+        <tr><td><code>dim_vendedor</code></td><td>4 zonas</td><td class="n">8</td></tr>
+      </table>
+      <p class="note">La categoría filtra las ventas pero no la cartera, porque una factura mezcla productos de varias categorías.</p>
+    </div>
+  </div>
+
+  <h2>La medida que diferencia</h2>
+  <pre><code>Margen Potencial = [Venta Bruta] - [Costo]
+% Margen Cedido  = DIVIDE([Descuento Otorgado], [Margen Potencial])</code></pre>
+  <p class="note">De todo el margen que se habría obtenido a precio de lista, ¿qué proporción se entregó negociando? Las 14 medidas están en <a style="color:var(--accent)" href="https://github.com/byronbustamanteg700/powerbi-control-comercial/blob/main/docs/medidas-dax.md">docs/medidas-dax.md</a>.</p>
+
+  <footer>
+    Proyecto de portafolio con datos simulados; no contiene información de ningún cliente.<br>
+    Byron Bustamante — economista · <a href="https://github.com/byronbustamanteg700">github.com/byronbustamanteg700</a>
+  </footer>
+</div>
+</body>
+</html>
